@@ -9,6 +9,10 @@ public class CarFindAd {
     private String adType;
     private String title;
     private Map<String, Object> basicInfo;
+    private String make;
+    private String model;
+    private String type;
+    private String category;
     private List<Map<String, Object>> pictures;
     private Map<String, Object> buyInfo;
     private Map<String, Object> motorInfo;
@@ -17,6 +21,38 @@ public class CarFindAd {
     private String description;
     private Map<String, Object> place;
     private String chassisNo;
+
+    public String getModel() {
+        return basicInfo.get("model").toString();
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public String getType() {
+        return basicInfo.get("type").toString();
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getCategory() {
+        return basicInfo.get("category").toString();
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getMake() {
+        return basicInfo.get("make").toString();
+    }
+
+    public void setMake(String make) {
+        this.make = make;
+    }
 
     public String getId() {
         return id;

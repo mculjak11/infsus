@@ -1,17 +1,15 @@
 package com.is.infsusdz.controllers;
 
-import com.is.infsusdz.users.CarFindAd;
-import com.is.infsusdz.users.CarFindAdRepository;
-import com.is.infsusdz.users.CarFindUser;
-import com.is.infsusdz.users.CarFindUserRepository;
+import com.is.infsusdz.users.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.schema.TypedJsonSchemaObject;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class CarFindController {
@@ -22,7 +20,53 @@ public class CarFindController {
     @Autowired
     private CarFindUserRepository carFindUserRepo;
 
-    @GetMapping(path="/users/{username}", produces = "application/json")
+    @PostMapping(path="/api/login", consumes = MediaType.APPLICATION_JSON_VALUE,
+                produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity verifyUser(@RequestBody LoginData userLogin) {
+        System.out.println(userLogin.getEmail() + " " + userLogin.getPassword());
+        CarFindUser usr = carFindUserRepo.findCarFindUserByEmailAndPassword(userLogin.getEmail(),
+                                                                        userLogin.getPassword());
+        if (usr != null) {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .body("login success");
+        } else {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .body("user not found");
+        }
+    }
+
+    @PostMapping(path="/api/signup")
+    public ResponseEntity signup(@RequestBody SignupData userSignup) {
+        CarFindUser tmp = carFindUserRepo.findCarFindUserByUserName(userSignup.getUserName());
+        if (tmp == null) {
+            CarFindUser usr = new CarFindUser();
+            usr.setUserName(userSignup.getUserName());
+            usr.setEmail(userSignup.getEmail());
+            usr.setPassword(userSignup.getPassword());
+            Map<String, Object> usrInfo = new HashMap<>();
+            usrInfo.put("name", userSignup.getName());
+            usrInfo.put("surname", userSignup.getSurname());
+            usrInfo.put("phoneNo", userSignup.getPhoneNo());
+            Map<String, Object> placeInfo = new HashMap<>();
+            placeInfo.put("country", userSignup.getCountry());
+            placeInfo.put("city", userSignup.getCity());
+            placeInfo.put("address", userSignup.getAddress());
+            usrInfo.put("place", placeInfo);
+            usr.setUserInfo(usrInfo);
+            carFindUserRepo.save(usr);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .body("signup ok");
+        } else {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .body("username taken");
+        }
+    }
+
+    @GetMapping(path="/api/users/{username}", produces = "application/json")
     public ResponseEntity getUser(@PathVariable String username) {
 
         CarFindUser user1 = carFindUserRepo.findCarFindUserByUserName(username);
@@ -37,9 +81,12 @@ public class CarFindController {
         }
     }
 
-    @GetMapping(path="/ads/all", produces = "application/json")
+    @GetMapping(path="/api/ads/all", produces = "application/json")
     public ResponseEntity getAllAds() {
         List<CarFindAd> carAd = carFindAdRepo.findAll();
+        for (CarFindAd car : carAd) {
+            System.out.println(car.getMake());
+        }
         if (carAd.isEmpty()) {
             return ResponseEntity.ok()
                     .contentType(MediaType.TEXT_PLAIN)
@@ -51,7 +98,7 @@ public class CarFindController {
         }
     }
 
-    @GetMapping(path="/ads/{owner}", produces = "application/json")
+    @GetMapping(path="/api/ads/{owner}", produces = "application/json")
     public ResponseEntity getAdsFromOwner(@PathVariable String owner) {
         List<CarFindAd> carAd = carFindAdRepo.findCarFindAdByOwner(owner);
         if (carAd.isEmpty()) {

@@ -5,10 +5,19 @@ import java.util.Map;
 
 public class CarFindUser {
     private String userName;
+    private String password;
     private String profilePic;
     private String email;
     private Map<String, Object> userInfo;
     private Map<List<String>, Object> ads;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getUserName() {
         return userName;
@@ -54,6 +63,7 @@ public class CarFindUser {
     public String toString() {
         return "CarFindUser{" +
                 "userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
                 ", profilePic='" + profilePic + '\'' +
                 ", email='" + email + '\'' +
                 ", userInfo=" + userInfo +
