@@ -9,7 +9,7 @@ public class SignupData {
     private String country;
     private String city;
     private String address;
-    private Integer phoneNo;
+    private String phoneNo;
 
     public String getUserName() {
         return userName;
@@ -75,11 +75,11 @@ public class SignupData {
         this.address = address;
     }
 
-    public Integer getPhoneNo() {
+    public String getPhoneNo() {
         return phoneNo;
     }
 
-    public void setPhoneNo(Integer phoneNo) {
+    public void setPhoneNo(String phoneNo) {
         this.phoneNo = phoneNo;
     }
 

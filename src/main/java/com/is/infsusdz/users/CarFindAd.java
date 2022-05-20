@@ -8,50 +8,61 @@ public class CarFindAd {
     private String owner;
     private String adType;
     private String title;
-    private Map<String, Object> basicInfo;
     private String make;
     private String model;
     private String type;
     private String category;
     private List<Map<String, Object>> pictures;
-    private Map<String, Object> buyInfo;
-    private Map<String, Object> motorInfo;
+    private Integer price;
+    private Integer year;
+    private Integer km;
+    private Integer kw;
+    private Integer cm3;
+    private String fuel;
+    private String shifter;
+    private Integer gears;
+    private String drive;
+    private String consumption;
+    private String ecoRating;
     private String hit;
-    private String ownerNo;
+    private Integer ownerNo;
     private String description;
-    private Map<String, Object> place;
+    private String country;
+    private String city;
+    private String address;
     private String chassisNo;
 
-    public String getModel() {
-        return basicInfo.get("model").toString();
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public String getType() {
-        return basicInfo.get("type").toString();
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getCategory() {
-        return basicInfo.get("category").toString();
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getMake() {
-        return basicInfo.get("make").toString();
-    }
-
-    public void setMake(String make) {
-        this.make = make;
+    @Override
+    public String toString() {
+        return "CarFindAd{" +
+                "id='" + id + '\'' +
+                ", owner='" + owner + '\'' +
+                ", adType='" + adType + '\'' +
+                ", title='" + title + '\'' +
+                ", make='" + make + '\'' +
+                ", model='" + model + '\'' +
+                ", type='" + type + '\'' +
+                ", category='" + category + '\'' +
+                ", pictures=" + pictures +
+                ", price=" + price +
+                ", year=" + year +
+                ", km=" + km +
+                ", kw=" + kw +
+                ", cm3=" + cm3 +
+                ", fuel='" + fuel + '\'' +
+                ", shifter='" + shifter + '\'' +
+                ", gears=" + gears +
+                ", drive='" + drive + '\'' +
+                ", consumption='" + consumption + '\'' +
+                ", ecoRating='" + ecoRating + '\'' +
+                ", hit='" + hit + '\'' +
+                ", ownerNo=" + ownerNo +
+                ", description='" + description + '\'' +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", address='" + address + '\'' +
+                ", chassisNo='" + chassisNo + '\'' +
+                '}';
     }
 
     public String getId() {
@@ -86,12 +97,36 @@ public class CarFindAd {
         this.title = title;
     }
 
-    public Map<String, Object> getBasicInfo() {
-        return basicInfo;
+    public String getMake() {
+        return make;
     }
 
-    public void setBasicInfo(Map<String, Object> basicInfo) {
-        this.basicInfo = basicInfo;
+    public void setMake(String make) {
+        this.make = make;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public List<Map<String, Object>> getPictures() {
@@ -102,20 +137,92 @@ public class CarFindAd {
         this.pictures = pictures;
     }
 
-    public Map<String, Object> getBuyInfo() {
-        return buyInfo;
+    public Integer getPrice() {
+        return price;
     }
 
-    public void setBuyInfo(Map<String, Object> buyInfo) {
-        this.buyInfo = buyInfo;
+    public void setPrice(Integer price) {
+        this.price = price;
     }
 
-    public Map<String, Object> getMotorInfo() {
-        return motorInfo;
+    public Integer getYear() {
+        return year;
     }
 
-    public void setMotorInfo(Map<String, Object> motorInfo) {
-        this.motorInfo = motorInfo;
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public Integer getKm() {
+        return km;
+    }
+
+    public void setKm(Integer km) {
+        this.km = km;
+    }
+
+    public Integer getKw() {
+        return kw;
+    }
+
+    public void setKw(Integer kw) {
+        this.kw = kw;
+    }
+
+    public Integer getCm3() {
+        return cm3;
+    }
+
+    public void setCm3(Integer cm3) {
+        this.cm3 = cm3;
+    }
+
+    public String getFuel() {
+        return fuel;
+    }
+
+    public void setFuel(String fuel) {
+        this.fuel = fuel;
+    }
+
+    public String getShifter() {
+        return shifter;
+    }
+
+    public void setShifter(String shifter) {
+        this.shifter = shifter;
+    }
+
+    public Integer getGears() {
+        return gears;
+    }
+
+    public void setGears(Integer gears) {
+        this.gears = gears;
+    }
+
+    public String getDrive() {
+        return drive;
+    }
+
+    public void setDrive(String drive) {
+        this.drive = drive;
+    }
+
+    public String getConsumption() {
+        return consumption;
+    }
+
+    public void setConsumption(String consumption) {
+        this.consumption = consumption;
+    }
+
+    public String getEcoRating() {
+        return ecoRating;
+    }
+
+    public void setEcoRating(String ecoRating) {
+        this.ecoRating = ecoRating;
     }
 
     public String getHit() {
@@ -126,11 +233,11 @@ public class CarFindAd {
         this.hit = hit;
     }
 
-    public String getOwnerNo() {
+    public Integer getOwnerNo() {
         return ownerNo;
     }
 
-    public void setOwnerNo(String ownerNo) {
+    public void setOwnerNo(Integer ownerNo) {
         this.ownerNo = ownerNo;
     }
 
@@ -142,12 +249,28 @@ public class CarFindAd {
         this.description = description;
     }
 
-    public Map<String, Object> getPlace() {
-        return place;
+    public String getCountry() {
+        return country;
     }
 
-    public void setPlace(Map<String, Object> place) {
-        this.place = place;
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getChassisNo() {
@@ -156,24 +279,5 @@ public class CarFindAd {
 
     public void setChassisNo(String chassisNo) {
         this.chassisNo = chassisNo;
-    }
-
-    @Override
-    public String toString() {
-        return "CarFindAd{" +
-                "id='" + id + '\'' +
-                ", owner='" + owner + '\'' +
-                ", adType='" + adType + '\'' +
-                ", title='" + title + '\'' +
-                ", basicInfo=" + basicInfo +
-                ", pictures=" + pictures +
-                ", buyInfo=" + buyInfo +
-                ", motorInfo=" + motorInfo +
-                ", hit='" + hit + '\'' +
-                ", ownerNo='" + ownerNo + '\'' +
-                ", description='" + description + '\'' +
-                ", place=" + place +
-                ", chassisNo='" + chassisNo + '\'' +
-                '}';
     }
 }

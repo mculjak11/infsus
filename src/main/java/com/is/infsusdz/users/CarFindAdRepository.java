@@ -8,4 +8,5 @@ public interface CarFindAdRepository extends MongoRepository<CarFindAd, String> 
     public CarFindAd findCarFindAdById(String id);
     public List<CarFindAd> findAll();
     public List<CarFindAd> findCarFindAdByOwner(String owner);
+    public List<CarFindAd> findCarFindAdByYearBetween(Integer first, Integer second);
 }

@@ -2,7 +2,6 @@ package com.is.infsusdz.controllers;
 
 import com.is.infsusdz.users.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.schema.TypedJsonSchemaObject;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +22,6 @@ public class CarFindController {
     @PostMapping(path="/api/login", consumes = MediaType.APPLICATION_JSON_VALUE,
                 produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity verifyUser(@RequestBody LoginData userLogin) {
-        System.out.println(userLogin.getEmail() + " " + userLogin.getPassword());
         CarFindUser usr = carFindUserRepo.findCarFindUserByEmailAndPassword(userLogin.getEmail(),
                                                                         userLogin.getPassword());
         if (usr != null) {
@@ -98,13 +96,16 @@ public class CarFindController {
         }
     }
 
-    @GetMapping(path="/api/ads/{owner}", produces = "application/json")
-    public ResponseEntity getAdsFromOwner(@PathVariable String owner) {
-        List<CarFindAd> carAd = carFindAdRepo.findCarFindAdByOwner(owner);
+    @PostMapping(path="/api/ads", produces = "application/json")
+    public ResponseEntity getAdsFilter(@RequestBody String filter) {
+        List<String> fil = List.of(filter.split(":"));
+        Integer first = Integer.parseInt(fil.get(0));
+        Integer second = Integer.parseInt(fil.get(1));
+        List<CarFindAd> carAd = carFindAdRepo.findCarFindAdByYearBetween(first, second);
         if (carAd.isEmpty()) {
             return ResponseEntity.ok()
                     .contentType(MediaType.TEXT_PLAIN)
-                    .body("There are no ads from " + owner);
+                    .body("There are no ads with that filter");
         } else {
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
