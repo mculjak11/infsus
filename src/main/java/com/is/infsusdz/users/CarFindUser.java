@@ -10,7 +10,7 @@ public class CarFindUser {
     private String profilePic;
     private String email;
     private Map<String, Object> userInfo;
-    private Map<String,List<Object>> ads;
+    private Map<String,List<String>> ads;
 
     public String getPassword() {
         return password;
@@ -60,11 +60,11 @@ public class CarFindUser {
         this.userInfo = userInfo;
     }
 
-    public Map<String,List<Object>> getAds() {
+    public Map<String,List<String>> getAds() {
         return ads;
     }
 
-    public void setAds(Map<String,List<Object>> ads) {
+    public void setAds(Map<String,List<String>> ads) {
         this.ads = ads;
     }
 

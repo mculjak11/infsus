@@ -25,7 +25,7 @@ public class CarFindController {
         if (usr != null) {
             return ResponseEntity.ok()
                     .contentType(MediaType.TEXT_PLAIN)
-                    .body("login success");
+                    .body(usr.getUsername());
         } else {
             return ResponseEntity.ok()
                     .contentType(MediaType.TEXT_PLAIN)
@@ -132,6 +132,63 @@ public class CarFindController {
         }
     }
 
+    @PostMapping(path="/api/ads/getFavorites")
+    public ResponseEntity getFavoriteAds(@RequestBody String username) {
+        CarFindUser usr = carFindUserRepo.findCarFindUserByUsername(username);
+        List<CarFindAd> favoriteAds = new ArrayList<>();
+        if(usr.getAds() != null) {
+            List<String> favorites = usr.getAds().get("favoriteAds");
+            if (favorites != null) {
+                CarFindAd favAd = new CarFindAd();
+                for (String id : favorites) {
+                    favAd = carFindAdRepo.findCarFindAdById(id);
+                    favoriteAds.add(favAd);
+                }
+            }
+        }
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(favoriteAds);
+    }
+
+    @PostMapping(path="/api/ads/addFavorite")
+    public ResponseEntity setFavoriteAd(@RequestBody FavoriteData favoriteData) {
+        CarFindUser usr = carFindUserRepo.findCarFindUserByUsername(favoriteData.getUsername());
+        carFindUserRepo.delete(usr);
+        Map<String,List<String>> tmpAds = usr.getAds();
+        if (tmpAds != null) {
+            List<String> favorites = usr.getAds().get("favoriteAds");
+            if (favorites != null) {
+                if (!tmpAds.get("favoriteAds").contains(favoriteData.getId()))
+                    tmpAds.get("favoriteAds").add(favoriteData.getId());
+            } else {
+                tmpAds = new HashMap<>();
+                tmpAds.put("favoriteAds", Collections.singletonList(favoriteData.getId()));
+            }
+        } else {
+            tmpAds = new HashMap<>();
+            tmpAds.put("favoriteAds", Collections.singletonList(favoriteData.getId()));
+        }
+        usr.setAds(tmpAds);
+        carFindUserRepo.save(usr);
+        return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_PLAIN)
+                .body("Added to favorites");
+    }
+
+    @PostMapping(path="/api/ads/delFavorite")
+    public ResponseEntity deleteFavoriteAd(@RequestBody FavoriteData favoriteData) {
+        CarFindUser usr = carFindUserRepo.findCarFindUserByUsername(favoriteData.getUsername());
+        carFindUserRepo.delete(usr);
+        Map<String,List<String>> tmpAds = usr.getAds();
+        tmpAds.get("favoriteAds").remove(favoriteData.getId());
+        usr.setAds(tmpAds);
+        carFindUserRepo.save(usr);
+        return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_PLAIN)
+                .body("Deleted from favorites");
+    }
+
 
     @PostMapping(path="/api/ads/filter", produces = "application/json")
     public ResponseEntity getAdsFilter(@RequestBody FilteredAd filter) {
@@ -144,7 +201,7 @@ public class CarFindController {
         List<CarFindAd> tmpAds = new ArrayList<>();
         List<String> tmpIds = new ArrayList<>();
 
-        if (filter.getMake() != null) {
+        if (filter.getMake() != null && filter.getMake() != "") {
             tmpAds = carFindAdRepo.findCarFindAdByMake(filter.getMake());
             for (CarFindAd ad: tmpAds) {
                 tmpIds.add(ad.getId());
@@ -153,7 +210,7 @@ public class CarFindController {
             tmpIds = new ArrayList<>();
         } else listAds.add(allIds);
 
-        if (filter.getAdType() != null) {
+        if (filter.getAdType() != null && filter.getAdType() != "") {
             tmpAds = carFindAdRepo.findCarFindAdByAdType(filter.getAdType());
             for (CarFindAd ad: tmpAds) {
                 tmpIds.add(ad.getId());
@@ -161,7 +218,7 @@ public class CarFindController {
             listAds.add(tmpIds);
             tmpIds = new ArrayList<>();
         } else listAds.add(allIds);
-        if (filter.getCategory() != null) {
+        if (filter.getCategory() != null && filter.getCategory() != "") {
             tmpAds = carFindAdRepo.findCarFindAdByCategory(filter.getCategory());
             for (CarFindAd ad: tmpAds) {
                 tmpIds.add(ad.getId());
@@ -169,7 +226,7 @@ public class CarFindController {
             listAds.add(tmpIds);
             tmpIds = new ArrayList<>();
         } else listAds.add(allIds);
-        if (filter.getCity() != null) {
+        if (filter.getCity() != null && filter.getCity() != "") {
             tmpAds = carFindAdRepo.findCarFindAdByCity(filter.getCity());
             for (CarFindAd ad: tmpAds) {
                 tmpIds.add(ad.getId());
@@ -177,7 +234,7 @@ public class CarFindController {
             listAds.add(tmpIds);
             tmpIds = new ArrayList<>();
         } else listAds.add(allIds);
-        if (filter.getFuel() != null) {
+        if (filter.getFuel() != null && filter.getFuel() != "") {
             tmpAds = carFindAdRepo.findCarFindAdByFuel(filter.getFuel());
             for (CarFindAd ad: tmpAds) {
                 tmpIds.add(ad.getId());
@@ -185,7 +242,7 @@ public class CarFindController {
             listAds.add(tmpIds);
             tmpIds = new ArrayList<>();
         } else listAds.add(allIds);
-        if (filter.getModel() != null) {
+        if (filter.getModel() != null && filter.getModel() != "") {
             tmpAds = carFindAdRepo.findCarFindAdByModel(filter.getModel());
             for (CarFindAd ad: tmpAds) {
                 tmpIds.add(ad.getId());
@@ -193,7 +250,7 @@ public class CarFindController {
             listAds.add(tmpIds);
             tmpIds = new ArrayList<>();
         } else listAds.add(allIds);
-        if (filter.getShifter() != null) {
+        if (filter.getShifter() != null && filter.getShifter() != "") {
             tmpAds = carFindAdRepo.findCarFindAdByShifter(filter.getShifter());
             for (CarFindAd ad: tmpAds) {
                 tmpIds.add(ad.getId());
@@ -254,8 +311,18 @@ public class CarFindController {
         carFindAdRepo.save(adCreate);
         CarFindUser usr = carFindUserRepo.findCarFindUserByUsername(adCreate.getOwner());
         carFindUserRepo.delete(usr);
-        Map<String,List<Object>> tmpAds = usr.getAds();
-        tmpAds.get("activeAds").add(adCreate.getId());
+        Map<String,List<String>> tmpAds = usr.getAds();
+        if (tmpAds != null) {
+            if (tmpAds.get("activeAds") != null){
+                tmpAds.get("activeAds").add(adCreate.getId());
+            } else {
+                tmpAds = new HashMap<>();
+                tmpAds.put("activeAds", Collections.singletonList(adCreate.getId()));
+            }
+        } else {
+            tmpAds = new HashMap<>();
+            tmpAds.put("activeAds", Collections.singletonList(adCreate.getId()));
+        }
         usr.setAds(tmpAds);
         carFindUserRepo.save(usr);
         return ResponseEntity.ok()
@@ -279,7 +346,7 @@ public class CarFindController {
         carFindAdRepo.delete(ad);
         CarFindUser usr = carFindUserRepo.findCarFindUserByUsername(ad.getOwner());
         carFindUserRepo.delete(usr);
-        Map<String,List<Object>> tmpAds = usr.getAds();
+        Map<String,List<String>> tmpAds = usr.getAds();
         tmpAds.get("activeAds").remove(id);
         usr.setAds(tmpAds);
         carFindUserRepo.save(usr);
