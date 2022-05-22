@@ -133,8 +133,8 @@ public class CarFindController {
     }
 
     @PostMapping(path="/api/ads/getFavorites")
-    public ResponseEntity getFavoriteAds(@RequestBody String username) {
-        CarFindUser usr = carFindUserRepo.findCarFindUserByUsername(username);
+    public ResponseEntity getFavoriteAds(@RequestBody FavoriteGet favGet) {
+        CarFindUser usr = carFindUserRepo.findCarFindUserByUsername(favGet.getUsername());
         List<CarFindAd> favoriteAds = new ArrayList<>();
         if(usr.getAds() != null) {
             List<String> favorites = usr.getAds().get("favoriteAds");
