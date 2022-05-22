@@ -341,13 +341,13 @@ public class CarFindController {
     }
 
     @DeleteMapping(path="/api/ads/action")
-    public ResponseEntity deleteAd(@RequestBody String id) {
-        CarFindAd ad = carFindAdRepo.findCarFindAdById(id);
+    public ResponseEntity deleteAd(@RequestBody DeleteAd delAd) {
+        CarFindAd ad = carFindAdRepo.findCarFindAdById(delAd.getId());
         carFindAdRepo.delete(ad);
         CarFindUser usr = carFindUserRepo.findCarFindUserByUsername(ad.getOwner());
         carFindUserRepo.delete(usr);
         Map<String,List<String>> tmpAds = usr.getAds();
-        tmpAds.get("activeAds").remove(id);
+        tmpAds.get("activeAds").remove(delAd.getId());
         usr.setAds(tmpAds);
         carFindUserRepo.save(usr);
         return ResponseEntity.ok()
