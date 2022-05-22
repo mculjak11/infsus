@@ -7,6 +7,7 @@ import java.util.List;
 public interface CarFindAdRepository extends MongoRepository<CarFindAd, String> {
     public CarFindAd findCarFindAdById(String id);
     public List<CarFindAd> findAll();
+    public List<CarFindAd> findCarFindAdByOwner(String owner);
     public List<CarFindAd> findCarFindAdByYearIsBetween(Integer first, Integer second);
     public List<CarFindAd> findCarFindAdByPriceIsBetween(Integer price1, Integer price2);
     public List<CarFindAd> findCarFindAdByKwIsBetween(Integer kw1, Integer kw2);

@@ -1,7 +1,6 @@
 package com.is.infsusdz.users;
 
 import java.util.List;
-import java.util.Map;
 
 public class CarFindAd {
     private String id;
@@ -12,7 +11,7 @@ public class CarFindAd {
     private String model;
     private String type;
     private String category;
-    private List<Map<String, Object>> pictures;
+    private List<String> pictures;
     private Integer price;
     private Integer year;
     private Integer km;
@@ -129,11 +128,11 @@ public class CarFindAd {
         this.category = category;
     }
 
-    public List<Map<String, Object>> getPictures() {
+    public List<String> getPictures() {
         return pictures;
     }
 
-    public void setPictures(List<Map<String, Object>> pictures) {
+    public void setPictures(List<String> pictures) {
         this.pictures = pictures;
     }
 

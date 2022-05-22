@@ -4,27 +4,36 @@ import java.util.List;
 import java.util.Map;
 
 public class CarFindUser {
-    private String userName;
+    private String id;
+    private String username;
     private String password;
     private String profilePic;
     private String email;
     private Map<String, Object> userInfo;
-    private Map<List<String>, Object> ads;
+    private Map<String,List<Object>> ads;
 
     public String getPassword() {
         return password;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getProfilePic() {
@@ -51,18 +60,19 @@ public class CarFindUser {
         this.userInfo = userInfo;
     }
 
-    public Map<List<String>, Object> getAds() {
+    public Map<String,List<Object>> getAds() {
         return ads;
     }
 
-    public void setAds(Map<List<String>, Object> ads) {
+    public void setAds(Map<String,List<Object>> ads) {
         this.ads = ads;
     }
 
     @Override
     public String toString() {
         return "CarFindUser{" +
-                "userName='" + userName + '\'' +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", profilePic='" + profilePic + '\'' +
                 ", email='" + email + '\'' +

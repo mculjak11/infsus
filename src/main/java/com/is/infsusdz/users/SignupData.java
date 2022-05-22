@@ -1,7 +1,7 @@
 package com.is.infsusdz.users;
 
 public class SignupData {
-    private String userName;
+    private String username;
     private String password;
     private String email;
     private String name;
@@ -11,12 +11,12 @@ public class SignupData {
     private String address;
     private String phoneNo;
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -86,7 +86,7 @@ public class SignupData {
     @Override
     public String toString() {
         return "SignupData{" +
-                "userName='" + userName + '\'' +
+                "userName='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", name='" + name + '\'' +

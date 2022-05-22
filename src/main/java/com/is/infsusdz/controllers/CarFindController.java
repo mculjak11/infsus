@@ -1,16 +1,12 @@
 package com.is.infsusdz.controllers;
 
-import com.google.common.collect.Sets;
 import com.is.infsusdz.users.*;
-import jdk.swing.interop.SwingInterOpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 public class CarFindController {
@@ -39,10 +35,10 @@ public class CarFindController {
 
     @PostMapping(path="/api/signup")
     public ResponseEntity signup(@RequestBody SignupData userSignup) {
-        CarFindUser tmp = carFindUserRepo.findCarFindUserByUserName(userSignup.getUserName());
+        CarFindUser tmp = carFindUserRepo.findCarFindUserByUsername(userSignup.getUsername());
         if (tmp == null) {
             CarFindUser usr = new CarFindUser();
-            usr.setUserName(userSignup.getUserName());
+            usr.setUsername(userSignup.getUsername());
             usr.setEmail(userSignup.getEmail());
             usr.setPassword(userSignup.getPassword());
             Map<String, Object> usrInfo = new HashMap<>();
@@ -69,7 +65,7 @@ public class CarFindController {
     @GetMapping(path="/api/users/{username}", produces = "application/json")
     public ResponseEntity getUser(@PathVariable String username) {
 
-        CarFindUser user1 = carFindUserRepo.findCarFindUserByUserName(username);
+        CarFindUser user1 = carFindUserRepo.findCarFindUserByUsername(username);
         if (user1 == null) {
             return ResponseEntity.ok()
                     .contentType(MediaType.TEXT_PLAIN)
@@ -106,6 +102,17 @@ public class CarFindController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping(path="/api/ads/owner={owner}", produces = "application/json")
+    public ResponseEntity getAdsByOwner(@PathVariable String owner) {
+        List<CarFindAd> carAd = carFindAdRepo.findCarFindAdByOwner(owner);
+        if (carAd.isEmpty()) {
+            return ResponseEntity.ok() .contentType(MediaType.TEXT_PLAIN) .body("There are no ads from " + owner);
+        } else {
+            return ResponseEntity.ok() .contentType(MediaType.APPLICATION_JSON) .body(carAd);
+        }
+    }
+
 
     @GetMapping(path="/api/ads/title={title}")
     public ResponseEntity getAdByTitle(@PathVariable String title) {
@@ -245,6 +252,12 @@ public class CarFindController {
     @PostMapping(path="/api/ads/action", produces = "application/json")
     public ResponseEntity createAd(@RequestBody CarFindAd adCreate) {
         carFindAdRepo.save(adCreate);
+        CarFindUser usr = carFindUserRepo.findCarFindUserByUsername(adCreate.getOwner());
+        carFindUserRepo.delete(usr);
+        Map<String,List<Object>> tmpAds = usr.getAds();
+        tmpAds.get("activeAds").add(adCreate.getId());
+        usr.setAds(tmpAds);
+        carFindUserRepo.save(usr);
         return ResponseEntity.ok()
                 .contentType(MediaType.TEXT_PLAIN)
                 .body("Successfully created ad");
@@ -264,6 +277,12 @@ public class CarFindController {
     public ResponseEntity deleteAd(@RequestBody String id) {
         CarFindAd ad = carFindAdRepo.findCarFindAdById(id);
         carFindAdRepo.delete(ad);
+        CarFindUser usr = carFindUserRepo.findCarFindUserByUsername(ad.getOwner());
+        carFindUserRepo.delete(usr);
+        Map<String,List<Object>> tmpAds = usr.getAds();
+        tmpAds.get("activeAds").remove(id);
+        usr.setAds(tmpAds);
+        carFindUserRepo.save(usr);
         return ResponseEntity.ok()
                 .contentType(MediaType.TEXT_PLAIN)
                 .body("Deleted ad successfully");
